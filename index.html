@@ -1,71 +1,249 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Zuzu Beauty Studio - Certificate Verification</title>
 
 <style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
 body{
-    background:#111;
-    color:#fff;
-    font-family:Arial,sans-serif;
-    text-align:center;
-    padding:40px;
+background:linear-gradient(135deg,#2b0b5f,#4b1f83,#2b0b5f);
+min-height:100vh;
+color:white;
+padding:20px;
 }
+
 .container{
-    max-width:700px;
-    margin:auto;
-    background:#1b1b1b;
-    padding:30px;
-    border:2px solid gold;
-    border-radius:15px;
+max-width:900px;
+margin:auto;
 }
-h1{
-    color:gold;
+
+.logo{
+text-align:center;
+margin-top:20px;
 }
-input{
-    width:80%;
-    padding:12px;
-    margin:10px;
-    border-radius:8px;
-    border:none;
+
+.logo img{
+max-width:140px;
 }
-button{
-    background:gold;
-    color:black;
-    border:none;
-    padding:12px 25px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
+
+.brand{
+text-align:center;
+margin-top:10px;
 }
-#result{
-    margin-top:25px;
+
+.brand h1{
+font-size:3rem;
+font-weight:700;
 }
-.valid{
-    color:#00ff88;
+
+.brand p{
+letter-spacing:8px;
+font-style:italic;
+margin-top:10px;
+opacity:.8;
 }
-.invalid{
-    color:red;
+
+.title{
+text-align:center;
+margin-top:50px;
+font-size:2rem;
+color:#ffd86b;
 }
+
+.subtitle{
+text-align:center;
+margin-top:10px;
+opacity:.85;
+}
+
+.search-box{
+margin-top:30px;
+display:flex;
+gap:10px;
+}
+
+.search-box input{
+flex:1;
+padding:18px;
+border:none;
+border-radius:12px;
+font-size:18px;
+}
+
+.search-box button{
+padding:18px 30px;
+border:none;
+border-radius:12px;
+background:#ffd86b;
+color:#2b0b5f;
+font-weight:700;
+cursor:pointer;
+}
+
+.search-box button:hover{
+opacity:.9;
+}
+
+.result-card{
+display:none;
+background:white;
+color:#222;
+margin-top:40px;
+padding:30px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.verified{
+text-align:center;
+color:#00a651;
+font-size:30px;
+font-weight:bold;
+margin-bottom:25px;
+}
+
+.info{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.info-item{
+padding:15px;
+background:#f7f7f7;
+border-radius:12px;
+}
+
+.label{
+font-size:13px;
+color:#666;
+margin-bottom:5px;
+}
+
+.value{
+font-size:18px;
+font-weight:600;
+}
+
+.footer{
+margin-top:50px;
+text-align:center;
+opacity:.8;
+}
+
+.notfound{
+display:none;
+margin-top:30px;
+background:#ffebee;
+color:#d32f2f;
+padding:20px;
+border-radius:15px;
+text-align:center;
+font-weight:bold;
+}
+
+@media(max-width:700px){
+
+.brand h1{
+font-size:2rem;
+}
+
+.title{
+font-size:1.5rem;
+}
+
+.search-box{
+flex-direction:column;
+}
+
+.info{
+grid-template-columns:1fr;
+}
+
+}
+
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-<h1>ZUZU BEAUTY STUDIO</h1>
-<h2>Certificate Verification</h2>
+<div class="logo">
+<img src="seal.png" alt="Zuzu Seal">
+</div>
 
-<input type="text" id="cert" placeholder="Enter Certificate Number">
+<div class="brand">
+<h1>Zuzu Beauty Studio</h1>
+<p>The Beauty Expert</p>
+</div>
 
-<br>
+<div class="title">
+CERTIFICATE VERIFICATION
+</div>
 
-<button onclick="verifyCert()">Verify</button>
+<div class="subtitle">
+Verify student certificates issued by Zuzu Beauty Studio
+</div>
 
-<div id="result"></div>
+<div class="search-box">
+<input
+type="text"
+id="cert"
+placeholder="Enter Certificate Number">
+<button onclick="verifyCert()">
+VERIFY
+</button>
+</div>
+
+<div class="notfound" id="notfound">
+❌ Certificate Not Found
+</div>
+
+<div class="result-card" id="resultCard">
+
+<div class="verified">
+✅ CERTIFICATE VERIFIED
+</div>
+
+<div class="info">
+
+<div class="info-item">
+<div class="label">Student Name</div>
+<div class="value" id="name"></div>
+</div>
+
+<div class="info-item">
+<div class="label">Course</div>
+<div class="value" id="course"></div>
+</div>
+
+<div class="info-item">
+<div class="label">Certificate Number</div>
+<div class="value" id="certno"></div>
+</div>
+
+<div class="info-item">
+<div class="label">Issue Date</div>
+<div class="value" id="date"></div>
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+© 2026 Zuzu Beauty Studio • Sivakasi
+</div>
 
 </div>
 
@@ -76,37 +254,32 @@ let students=[];
 fetch('students.json')
 .then(response=>response.json())
 .then(data=>{
-    students=data;
+students=data;
 });
 
 function verifyCert(){
 
-let cert=document.getElementById("cert").value.trim();
+let cert=document.getElementById('cert').value.trim();
 
 let student=students.find(
 s=>s.cert.toUpperCase()===cert.toUpperCase()
 );
 
+document.getElementById('resultCard').style.display='none';
+document.getElementById('notfound').style.display='none';
+
 if(student){
 
-document.getElementById("result").innerHTML=`
-<h2 class="valid">✅ CERTIFICATE VERIFIED</h2>
+document.getElementById('name').innerText=student.name;
+document.getElementById('course').innerText=student.course;
+document.getElementById('certno').innerText=student.cert;
+document.getElementById('date').innerText=student.date;
 
-<p><b>Student:</b> ${student.name}</p>
-
-<p><b>Course:</b> ${student.course}</p>
-
-<p><b>Certificate No:</b> ${student.cert}</p>
-
-<p><b>Date:</b> ${student.date}</p>
-
-`;
+document.getElementById('resultCard').style.display='block';
 
 }else{
 
-document.getElementById("result").innerHTML=`
-<h2 class="invalid">❌ Certificate Not Found</h2>
-`;
+document.getElementById('notfound').style.display='block';
 
 }
 
