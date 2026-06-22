@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zuzu Beauty Studio - Certificate Verification</title>
+
+<style>
+body{
+    background:#111;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    padding:40px;
+}
+.container{
+    max-width:700px;
+    margin:auto;
+    background:#1b1b1b;
+    padding:30px;
+    border:2px solid gold;
+    border-radius:15px;
+}
+h1{
+    color:gold;
+}
+input{
+    width:80%;
+    padding:12px;
+    margin:10px;
+    border-radius:8px;
+    border:none;
+}
+button{
+    background:gold;
+    color:black;
+    border:none;
+    padding:12px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+#result{
+    margin-top:25px;
+}
+.valid{
+    color:#00ff88;
+}
+.invalid{
+    color:red;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>ZUZU BEAUTY STUDIO</h1>
+<h2>Certificate Verification</h2>
+
+<input type="text" id="cert" placeholder="Enter Certificate Number">
+
+<br>
+
+<button onclick="verifyCert()">Verify</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+let students=[];
+
+fetch('students.json')
+.then(response=>response.json())
+.then(data=>{
+    students=data;
+});
+
+function verifyCert(){
+
+let cert=document.getElementById("cert").value.trim();
+
+let student=students.find(
+s=>s.cert.toUpperCase()===cert.toUpperCase()
+);
+
+if(student){
+
+document.getElementById("result").innerHTML=`
+<h2 class="valid">✅ CERTIFICATE VERIFIED</h2>
+
+<p><b>Student:</b> ${student.name}</p>
+
+<p><b>Course:</b> ${student.course}</p>
+
+<p><b>Certificate No:</b> ${student.cert}</p>
+
+<p><b>Date:</b> ${student.date}</p>
+
+`;
+
+}else{
+
+document.getElementById("result").innerHTML=`
+<h2 class="invalid">❌ Certificate Not Found</h2>
+`;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
