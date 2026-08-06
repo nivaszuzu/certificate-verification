@@ -18,11 +18,22 @@ font-family:'Segoe UI',sans-serif;
 
 body{
 min-height:100vh;
-color:#fff;
 padding:20px;
-position:relative;
+color:white;
 overflow-x:hidden;
-background:#2b0b5f;
+
+background:
+linear-gradient(
+rgba(43,11,95,.25),
+rgba(75,31,131,.20),
+rgba(43,11,95,.25)
+),
+url("bg.png");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+background-attachment:fixed;
 }
 
 body::before{
